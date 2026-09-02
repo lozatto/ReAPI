@@ -167,18 +167,15 @@ jobs:
 
       - name: GPG Import
         run: |
-          echo "${{ secrets.PUB_ASC }}" > "${{ secrets.PUB_ASC_FILE }}"
-          echo "${{ secrets.KEY_ASC }}" > "${{ secrets.KEY_ASC_FILE }}"
-
           # Import the public key
-          gpg --batch --yes --import "${{ secrets.PUB_ASC_FILE }}"
+          gpg --batch --yes --import <(echo "${{ secrets.PUB_ASC }}")
           if [[ $? -ne 0 ]]; then
             echo "Error: Failed to import the public key"
             exit 1
           fi
           
           # Import the private key
-          gpg --batch --yes --import "${{ secrets.KEY_ASC_FILE }}"
+          gpg --batch --yes --import <(echo "${{ secrets.KEY_ASC }}")
           if [[ $? -ne 0 ]]; then
             echo "Error: Failed to import the private key"
             exit 2
@@ -281,10 +278,8 @@ jobs:
         run: |
         
           # new runner, niw signs
-          echo "${{ secrets.PUB_ASC }}" > "${{ secrets.PUB_ASC_FILE }}"
-          echo "${{ secrets.KEY_ASC }}" > "${{ secrets.KEY_ASC_FILE }}"
-          gpg --batch --yes --import "${{ secrets.PUB_ASC_FILE }}"
-          gpg --batch --yes --import "${{ secrets.KEY_ASC_FILE }}"
+          gpg --batch --yes --import <(echo "${{ secrets.PUB_ASC }}")
+          gpg --batch --yes --import <(echo "${{ secrets.KEY_ASC }}")
           GPG_LINUX_FINGERPRINT=$(gpg --list-keys --with-colons | grep '^fpr' | head -n 1 | cut -d: -f10)
           echo "$GPG_LINUX_FINGERPRINT:6:" | gpg --batch --import-ownertrust
           echo "GPG_LINUX_FINGERPRINT=$GPG_LINUX_FINGERPRINT" >> $GITHUB_ENV
