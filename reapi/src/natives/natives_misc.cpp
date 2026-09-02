@@ -2184,13 +2184,13 @@ cell AMX_NATIVE_CALL rg_send_hudmessage(AMX *amx, cell *params)
 	textparms.b2 = 250;
 	textparms.a2 = 0;
 
-	textparms.x = amx_ctof(params[arg_x]);
-	textparms.y = amx_ctof(params[arg_y]);
+	textparms.x = *(float *)&params[arg_x];
+	textparms.y = *(float *)&params[arg_y];
 	textparms.effect = params[arg_effects];
-	textparms.fxTime = amx_ctof(params[arg_fxtime]);
-	textparms.holdTime = amx_ctof(params[arg_holdtime]);
-	textparms.fadeinTime = amx_ctof(params[arg_fadeintime]);
-	textparms.fadeoutTime = amx_ctof(params[arg_fadeouttime]);
+	textparms.fxTime = *(float *)&params[arg_fxtime];
+	textparms.holdTime = *(float *)&params[arg_holdtime];
+	textparms.fadeinTime = *(float *)&params[arg_fadeintime];
+	textparms.fadeoutTime = *(float *)&params[arg_fadeouttime];
 	textparms.channel = params[arg_channel];
 
 	g_ReGameApi->QueueHudMessage(nIndex, textparms, szMessage);
